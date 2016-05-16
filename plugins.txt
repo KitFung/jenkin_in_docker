@@ -63,3 +63,4 @@ pam-auth:latest
 credentials:latest
 htmlpublisher:latest
 xunit:latest
+swarm:latest
