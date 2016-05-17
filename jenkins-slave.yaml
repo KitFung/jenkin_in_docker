@@ -1,0 +1,30 @@
+# ReplicationControllers
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: jenkins-slave
+  name: jenkins-slave
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: jenkins-slave
+    spec:
+      containers:
+      - name: jenkins-slave
+        image: kitfung/jenkins-slave
+        env:
+            - name: JENKINS_USER_NAME
+              value: kitfung
+            - name: JENKINS_PASSWORD
+              value: password
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - "netstat -tan | grep ESTABLISHED"
+          initialDelaySeconds: 60
+          timeoutSeconds: 1

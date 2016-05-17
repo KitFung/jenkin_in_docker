@@ -1,0 +1,67 @@
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: jenkins
+  name: jenkins
+spec:
+  ports:
+    - name: http
+      port: 8080
+    - name: slave
+      port: 50000
+  selector:
+    name: jenkins-master
+---
+# ReplicationControllers
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: jenkins-rc
+  name: jenkins-controller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: jenkins-master
+    spec:
+      containers:
+      - name: jenkins-master
+        image: kitfung/jenkins-master
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: slave
+          containerPort: 50000
+        volumeMounts:
+            - name: jenkins-data
+              mountPath: /var/jenkins_home
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+            - name: docker-bin
+              mountPath: /usr/bin/docker
+            - name: docker-compose-bin
+              mountPath: /usr/bin/docker-compose
+        livenessProbe:
+          httpGet:
+            path: /login
+            port: 8080
+          initialDelaySeconds: 360
+          timeoutSeconds: 3
+      volumes: 
+      - name: jenkins-data
+        hostPath:
+          path: /var/jenkins
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker-bin
+        hostPath:
+          path: /usr/bin/docker
+      - name: docker-compose-bin
+        hostPath:
+          path: /usr/local/bin/docker-compose
