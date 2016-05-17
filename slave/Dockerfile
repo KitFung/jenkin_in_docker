@@ -3,7 +3,10 @@ MAINTAINER kitfung <kitfung@oursky.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get -y install curl net-tools
+RUN apt-get update \
+      && apt-get -y install curl net-tools \
+      && apt-get -y install sudo libsystemd-journal0 libapparmor-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 RUN curl -o swarm.jar "http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/2.0/swarm-client-2.0-jar-with-dependencies.jar"
 

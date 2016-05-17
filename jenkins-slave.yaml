@@ -21,6 +21,13 @@ spec:
               value: kitfung
             - name: JENKINS_PASSWORD
               value: password
+        volumeMounts:
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+            - name: docker-bin
+              mountPath: /usr/bin/docker
+            - name: docker-compose-bin
+              mountPath: /usr/bin/docker-compose
         livenessProbe:
           exec:
             command:
@@ -29,3 +36,13 @@ spec:
             - "netstat -tan | grep ESTABLISHED"
           initialDelaySeconds: 60
           timeoutSeconds: 1
+      volumes:
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker-bin
+        hostPath:
+          path: /usr/bin/docker
+      - name: docker-compose-bin
+        hostPath:
+          path: /usr/local/bin/docker-compose
