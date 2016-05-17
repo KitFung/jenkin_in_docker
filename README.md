@@ -24,13 +24,12 @@ Run in Docker
 Requirement:
 
 - [docker](https://docs.docker.com/engine/installation/)
-- [docekr-compose](https://docs.docker.com/compose/install/)
+- [docker-compose](https://docs.docker.com/compose/install/)
 
 
 #####Start Jenkins server
 
 ```bash
-
 docker run -d -p 8080:8080 \
  	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v $(which docker):/usr/bin/docker \
@@ -45,19 +44,19 @@ Remind: All the docker/docker-compose operation in Jenkins require `sudo`
 Open a new jobs in Jenkins and execute `sudo docker run hello-world` and check the console output.
 
 
-Integrate to Kubernetes
+Integration to Kubernetes
 ---
 
 1\. Move the `jenkins-master.yaml` and `jenkins-slave.yaml` to the host machine.
 
 2\. Create a folder to store the Jenkins master data
 
-```bash
+```Bash
 mkdir -p /var/jenkins
-chmod 666 /var/jenkins
+chmod -R 777 /var/jenkins
 ```
 
-3\. Edit those file to use the correct image if you have built a new image.
+3\. Edit `jenkins-master.yaml` and `jenkins-slave.yaml` to use the correct image if you have built a new image.
 
 4\. Start the Jenkins master server - `kubectl create -f jenkins-master.yaml`
 
@@ -65,8 +64,12 @@ chmod 666 /var/jenkins
 
 6\. Configurate jenkins according to the instruction
 
-7\. Edit the env in `jenkins-slave.yaml`. Change the value of variable according to your setting in previous step.
+7\. Edit the env in `jenkins-slave.yaml`. Change the value of variable according to your setting in previous step. **Moreover**, make sure the path in `volumes` is correct.
 
 8\. Start the Jenkins slave - `kubectl create -f jenkins-slave.yaml`
 
-9\. You can scale the number of slave later - `kubectl scale rc jenkins --replicas={{new number}}`
+9\. You can scale the number of slave later - `kubectl scale rc jenkins-controller --replicas={{new number}}`
+
+###Why don't use environment variable in yaml
+> Giving users the power to customize the env to the app is better than customizing the app to the env
+- [One of the kubernetes members](https://github.com/kubernetes/kubernetes/issues/1382#issuecomment-56200142)

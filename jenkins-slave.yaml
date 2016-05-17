@@ -4,6 +4,7 @@ kind: ReplicationController
 metadata:
   labels:
     name: jenkins-slave
+    app: jenkins
   name: jenkins-slave
 spec:
   replicas: 2
