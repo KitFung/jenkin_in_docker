@@ -56,7 +56,7 @@ mkdir -p /var/jenkins
 chmod -R 777 /var/jenkins
 ```
 
-3\. Edit `jenkins-master.yaml` and `jenkins-slave.yaml` to use the correct image if you have built a new image.
+3\. Edit `jenkins-master.yaml` and `jenkins-slave.yaml` to use the correct image if you have built a new image. **Moreover**, make sure the path of docker and docker-compose in `volumes` is correct.
 
 4\. Start the Jenkins master server - `kubectl create -f jenkins-master.yaml`
 
@@ -64,7 +64,7 @@ chmod -R 777 /var/jenkins
 
 6\. Configurate jenkins according to the instruction
 
-7\. Edit the env in `jenkins-slave.yaml`. Change the value of variable according to your setting in previous step. **Moreover**, make sure the path in `volumes` is correct.
+7\. Edit the env in `jenkins-slave.yaml`. Change the value of variable according to your setting in previous step.
 
 8\. Start the Jenkins slave - `kubectl create -f jenkins-slave.yaml`
 
